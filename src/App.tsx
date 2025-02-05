@@ -1,47 +1,21 @@
-import { Theme } from "@radix-ui/themes";
-import "@radix-ui/themes/styles.css";
-import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ThemeProvider } from "@/theme/theme-provider";
-import RootBoundary from "./components/errors/RootBoundary";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import JobBoard from './pages'
+import JobDetails from './pages/jobs/[id]'
+import NotFound from './pages/NotFound'
+import Layout from './layout'
 
-import Layout from "./layout";
-import Index from "./pages/index";
-import NotFound from "./pages/NotFound";
-import { useTheme } from "./theme/use-theme";
-
-const App = () => {
-  const { theme } = useTheme();
-
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: (
-        <Layout showSidebar={false} showHeader={false} showFooter={false} />
-      ),
-      errorElement: <RootBoundary />,
-      children: [
-        {
-          index: true,
-          element: <Index />,
-        },
-        {
-          path: "*",
-          element: <NotFound />,
-        },
-      ],
-    },
-  ]);
-
+function App() {
   return (
-    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-      <Theme appearance={theme === "system" ? "light" : theme}>
-        <div className={theme}>
-          <RouterProvider router={router} />
-        </div>
-      </Theme>
-    </ThemeProvider>
-  );
-};
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<JobBoard />} />
+          <Route path="/jobs/:id" element={<JobDetails />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Layout>
+    </Router>
+  )
+}
 
-export default App;
+export default App
